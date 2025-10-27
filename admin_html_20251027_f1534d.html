@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Panel Admin - Conversaciones con Sentido</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap');
+    
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #f8fafc;
+    }
+    
+    .sidebar {
+      background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 100%);
+      transition: all 0.3s ease;
+    }
+    
+    .stats-card {
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+      transition: all 0.3s ease;
+    }
+    
+    .stats-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    }
+    
+    .solicitud-card {
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+      border: 1px solid #e2e8f0;
+      transition: all 0.3s ease;
+    }
+    
+    .solicitud-card:hover {
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+    
+    .estado-nuevo {
+      background: #dbeafe;
+      color: #1e40af;
+    }
+    
+    .estado-contactado {
+      background: #fef3c7;
+      color: #d97706;
+    }
+    
+    .estado-proceso {
+      background: #dcfce7;
+      color: #16a34a;
+    }
+    
+    .estado-completado {
+      background: #f3f4f6;
+      color: #6b7280;
+    }
+    
+    .servicio-gratuito {
+      background: #dcfce7;
+      color: #16a34a;
+    }
+    
+    .servicio-expres {
+      background: #dbeafe;
+      color: #1e40af;
+    }
+    
+    .servicio-camino {
+      background: #f3e8ff;
+      color: #7c3aed;
+    }
+  </style>
+</head>
+<body class="bg-gray-50">
+  <div class="flex h-screen">
+    <!-- Sidebar -->
+    <div class="sidebar w-64 text-white flex flex-col">
+      <div class="p-6 border-b border-blue-700">
+        <h1 class="text-xl font-bold">Conversaciones con Sentido</h1>
+        <p class="text-blue-200 text-sm mt-1">Panel de Administración</p>
+      </div>
+      
+      <nav class="flex-1 p-4">
+        <ul class="space-y-2">
+          <li>
+            <a href="#dashboard" class="flex items-center space-x-3 p-3 rounded-lg bg-blue-700 text-white">
+              <i class="fas fa-chart-bar w-5"></i>
+              <span>Dashboard</span>
+            </a>
+          </li>
+          <li>
+            <a href="#solicitudes" class="flex items-center space-x-3 p-3 rounded-lg hover:bg-blue-700 text-blue-100 hover:text-white transition">
+              <i class="fas fa-inbox w-5"></i>
+              <span>Solicitudes</span>
+            </a>
+          </li>
+          <li>
+            <a href="#estadisticas" class="flex items-center space-x-3 p-3 rounded-lg hover:bg-blue-700 text-blue-100 hover:text-white transition">
+              <i class="fas fa-chart-pie w-5"></i>
+              <span>Estadísticas</span>
+            </a>
+          </li>
+          <li>
+            <a href="#configuracion" class="flex items-center space-x-3 p-3 rounded-lg hover:bg-blue-700 text-blue-100 hover:text-white transition">
+              <i class="fas fa-cog w-5"></i>
+              <span>Configuración</span>
+            </a>
+          </li>
+        </ul>
+      </nav>
+      
+      <div class="p-4 border-t border-blue-700">
+        <div class="flex items-center space-x-3 p-3">
+          <div class="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center">
+            <span class="text-white font-bold text-sm">H</span>
+          </div>
+          <div>
+            <p class="text-sm font-medium">Hemir Ochoa</p>
+            <p class="text-blue-300 text-xs">Administrador</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="flex-1 flex flex-col overflow-hidden">
+      <!-- Header -->
+      <header class="bg-white border-b border-gray-200 py-4 px-6">
+        <div class="flex justify-between items-center">
+          <h2 class="text-2xl font-semibold text-gray-800">Dashboard</h2>
+          <div class="flex items-center space-x-4">
+            <div class="relative">
+              <input type="text" placeholder="Buscar solicitudes..." class="pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+              <i class="fas fa-search absolute left-3 top-3 text-gray-400"></i>
+            </div>
+            <button class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg transition">
+              <i class="fas fa-sync-alt mr-2"></i>
+              Actualizar
+            </button>
+          </div>
+        </div>
+      </header>
+
+      <!-- Content -->
+      <main class="flex-1 overflow-y-auto p-6">
+        <!-- Stats Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+          <div class="stats-card p-6">
+            <div class="flex items-center justify-between">
+              <div>
+                <p class="text-gray-500 text-sm">Total Solicitudes</p>
+                <p class="text-3xl font-bold text-gray-800" id="total-solicitudes">0</p>
+              </div>
+              <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
+                <i class="fas fa-inbox text-blue-500 text-xl"></i>
+              </div>
+            </div>
+            <div class="mt-4">
+              <div class="flex items-center text-green-500 text-sm">
+                <i class="fas fa-arrow-up mr-1"></i>
+                <span>12% vs mes anterior</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="stats-card p-6">
+            <div class="flex items-center justify-between">
+              <div>
+                <p class="text-gray-500 text-sm">Nuevas Hoy</p>
+                <p class="text-3xl font-bold text-gray-800" id="nuevas-hoy">0</p>
+              </div>
+              <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
+                <i class="fas fa-plus text-green-500 text-xl"></i>
+              </div>
+            </div>
+            <div class="mt-4">
+              <div class="flex items-center text-green-500 text-sm">
+                <i class="fas fa-arrow-up mr-1"></i>
+                <span>3 nuevas hoy</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="stats-card p-6">
+            <div class="flex items-center justify-between">
+              <div>
+                <p class="text-gray-500 text-sm">Por Contactar</p>
+                <p class="text-3xl font-bold text-gray-800" id="por-contactar">0</p>
+              </div>
+              <div class="w-12 h-12 bg-yellow-100 rounded-full flex items-center justify-center">
+                <i class="fas fa-clock text-yellow-500 text-xl"></i>
+              </div>
+            </div>
+            <div class="mt-4">
+              <div class="flex items-center text-red-500 text-sm">
+                <i class="fas fa-exclamation-circle mr-1"></i>
+                <span>Requiere atención</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="stats-card p-6">
+            <div class="flex items-center justify-between">
+              <div>
+                <p class="text-gray-500 text-sm">Tasa Conversión</p>
+                <p class="text-3xl font-bold text-gray-800">42%</p>
+              </div>
+              <div class="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center">
+                <i class="fas fa-chart-line text-purple-500 text-xl"></i>
+              </div>
+            </div>
+            <div class="mt-4">
+              <div class="flex items-center text-green-500 text-sm">
+                <i class="fas fa-arrow-up mr-1"></i>
+                <span>8% vs mes anterior</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Solicitudes Recientes -->
+        <div class="bg-white rounded-xl shadow-sm border border-gray-200">
+          <div class="p-6 border-b border-gray-200">
+            <div class="flex justify-between items-center">
+              <h3 class="text-lg font-semibold text-gray-800">Solicitudes Recientes</h3>
+              <div class="flex space-x-2">
+                <select class="border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                  <option>Todos los estados</option>
+                  <option>Nuevo</option>
+                  <option>Contactado</option>
+                  <option>En proceso</option>
+                  <option>Completado</option>
+                </select>
+                <select class="border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                  <option>Todos los servicios</option>
+                  <option>7 Preguntas</option>
+                  <option>CCS Exprés</option>
+                  <option>CCS El Camino</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <div class="p-6">
+            <div id="solicitudes-container" class="space-y-4">
+              <!-- Las solicitudes se cargarán aquí dinámicamente -->
+              <div class="text-center py-8 text-gray-500">
+                <i class="fas fa-inbox text-4xl mb-4"></i>
+                <p>No hay solicitudes para mostrar</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <!-- Modal para ver detalles -->
+  <div id="modal-detalles" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50">
+    <div class="bg-white rounded-xl max-w-4xl w-full mx-4 max-h-[90vh] overflow-y-auto">
+      <div class="p-6 border-b border-gray-200">
+        <div class="flex justify-between items-center">
+          <h3 class="text-xl font-semibold text-gray-800">Detalles de la Solicitud</h3>
+          <button onclick="cerrarModal()" class="text-gray-400 hover:text-gray-600">
+            <i class="fas fa-times text-xl"></i>
+          </button>
+        </div>
+      </div>
+      <div class="p-6" id="modal-content">
+        <!-- Contenido del modal se carga aquí -->
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Datos de ejemplo para demostración
+    const solicitudesEjemplo = [
+      {
+        id: 'solicitud:1701234567890',
+        fecha: '2024-01-15T10:30:00.000Z',
+        estado: 'nuevo',
+        servicio: '7preguntas',
+        datos: {
+          nombre: 'María González',
+          email: 'maria.gonzalez@email.com',
+          telefono: '+56 9 1234 5678',
+          pais: 'Chile',
+          sinProblema: 'Me despertaría sintiendo paz interior y sin esa ansiedad constante en el pecho. Podría tomar mi desayuno tranquila, sin esa sensación de urgencia.',
+          nombreDificultad: 'El Perfeccionista',
+          tiempoPresente: 'Desde la adolescencia, pero se intensificó hace 3 años cuando empecé mi actual trabajo',
+          comoControlas: 'He aprendido a respirar profundamente cuando siento que la ansiedad aumenta. También establezco límites más claros en el trabajo y practico yoga los fines de semana.',
+          fortalezasOtros: 'Dirían que soy muy resiliente y que tengo una gran capacidad para escuchar a los demás. También que soy organizada y comprometida.',
+          opcionElegida: 'B',
+          preguntaFundamental: '¿Cómo puedo aprender a aceptar mis imperfecciones sin sentir que estoy fallando?'
+        }
+      },
+      {
+        id: 'solicitud:1701234567891',
+        fecha: '2024-01-14T15:20:00.000Z',
+        estado: 'contactado',
+        servicio: 'expres',
+        datos: {
+          nombre: 'Carlos Rodríguez',
+          email: 'carlos.rodriguez@email.com',
+          telefono: '+56 9 8765 4321',
+          pais: 'Chile',
+          sinProblema: 'Notaría que puedo tomar decisiones sin darle tantas vueltas a las cosas. Me levantaría con claridad mental.',
+          nombreDificultad: 'La Indecisión',
+          tiempoPresente: 'Desde que terminé la universidad, hace aproximadamente 5 años',
+          comoControlas: 'Hago listas de pros y contras, consulto con amigos de confianza y establezco plazos para decidir',
+          fortalezasOtros: 'Dirían que soy muy analítico y cuidadoso, que pienso bien las cosas antes de actuar',
+          opcionElegida: 'A',
+          preguntaFundamental: '¿Cómo desarrollar la confianza para tomar decisiones importantes sin miedo al arrepentimiento?'
+        }
+      }
+    ];
+
+    // Cargar solicitudes desde localStorage
+    function cargarSolicitudes() {
+      const solicitudes = [];
+      for (let i = 0; i < localStorage.length; i++) {
+        const key = localStorage.key(i);
+        if (key.startsWith('solicitud:')) {
+          try {
+            const solicitud = JSON.parse(localStorage.getItem(key));
+            solicitud.id = key;
+            solicitudes.push(solicitud);
+          } catch (e) {
+            console.error('Error al cargar solicitud:', key, e);
+          }
+        }
+      }
+      
+      // Combinar con datos de ejemplo para demostración
+      return [...solicitudes, ...solicitudesEjemplo];
+    }
+
+    // Formatear fecha
+    function formatearFecha(fechaISO) {
+      const fecha = new Date(fechaISO);
+      return fecha.toLocaleDateString('es-CL', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit'
+      });
+    }
+
+    // Obtener texto del servicio
+    function obtenerTextoServicio(servicio) {
+      const servicios = {
+        '7preguntas': '7 Preguntas para Comenzar el Cambio',
+        'expres': 'CCS Exprés',
+        'camino': 'CCS "El Camino"'
+      };
+      return servicios[servicio] || servicio;
+    }
+
+    // Obtener texto del estado
+    function obtenerTextoEstado(estado) {
+      const estados = {
+        'nuevo': 'Nuevo',
+        'contactado': 'Contactado',
+        'proceso': 'En Proceso',
+        'completado': 'Completado'
+      };
+      return estados[estado] || estado;
+    }
+
+    // Obtener clase CSS para el estado
+    function obtenerClaseEstado(estado) {
+      const clases = {
+        'nuevo': 'estado-nuevo',
+        'contactado': 'estado-contactado',
+        'proceso': 'estado-proceso',
+        'completado': 'estado-completado'
+      };
+      return clases[estado] || 'estado-nuevo';
+    }
+
+    // Obtener clase CSS para el servicio
+    function obtenerClaseServicio(servicio) {
+      const clases = {
+        '7preguntas': 'servicio-gratuito',
+        'expres': 'servicio-expres',
+        'camino': 'servicio-camino'
+      };
+      return clases[servicio] || 'servicio-gratuito';
+    }
+
+    // Renderizar solicitudes
+    function renderizarSolicitudes() {
+      const solicitudes = cargarSolicitudes();
+      const container = document.getElementById('solicitudes-container');
+      
+      // Actualizar estadísticas
+      document.getElementById('total-solicitudes').textContent = solicitudes.length;
+      document.getElementById('nuevas-hoy').textContent = solicitudes.filter(s => {
+        const hoy = new Date().toDateString();
+        const fechaSolicitud = new Date(s.fecha).toDateString();
+        return hoy === fechaSolicitud;
+      }).length;
+      
+      document.getElementById('por-contactar').textContent = solicitudes.filter(s => s.estado === 'nuevo').length;
+
+      if (solicitudes.length === 0) {
+        container.innerHTML = `
+          <div class="text-center py-8 text-gray-500">
+            <i class="fas fa-inbox text-4xl mb-4"></i>
+            <p>No hay solicitudes para mostrar</p>
+          </div>
+        `;
+        return;
+      }
+
+      // Ordenar por fecha (más recientes primero)
+      solicitudes.sort((a, b) => new Date(b.fecha) - new Date(a.fecha));
+
+      container.innerHTML = solicitudes.map(solicitud => `
+        <div class="solicitud-card p-6">
+          <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+            <div class="flex-1">
+              <div class="flex items-center space-x-4 mb-3">
+                <div class="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
+                  <span class="text-blue-600 font-semibold">${solicitud.datos.nombre.charAt(0)}</span>
+                </div>
+                <div>
+                  <h4 class="font-semibold text-gray-800">${solicitud.datos.nombre}</h4>
+                  <p class="text-gray-500 text-sm">${solicitud.datos.email} • ${solicitud.datos.telefono}</p>
+                </div>
+              </div>
+              
+              <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 text-sm">
+                <div>
+                  <span class="text-gray-500">Servicio:</span>
+                  <span class="ml-2 px-2 py-1 rounded-full text-xs font-medium ${obtenerClaseServicio(solicitud.servicio)}">
+                    ${obtenerTextoServicio(solicitud.servicio)}
+                  </span>
+                </div>
+                <div>
+                  <span class="text-gray-500">Estado:</span>
+                  <span class="ml-2 px-2 py-1 rounded-full text-xs font-medium ${obtenerClaseEstado(solicitud.estado)}">
+                    ${obtenerTextoEstado(solicitud.estado)}
+                  </span>
+                </div>
+                <div>
+                  <span class="text-gray-500">País:</span>
+                  <span class="ml-2 font-medium">${solicitud.datos.pais}</span>
+                </div>
+                <div>
+                  <span class="text-gray-500">Fecha:</span>
+                  <span class="ml-2 font-medium">${formatearFecha(solicitud.fecha)}</span>
+                </div>
+              </div>
+
+              <div class="mt-4">
+                <p class="text-gray-700 line-clamp-2">
+                  <strong>Pregunta Fundamental:</strong> ${solicitud.datos.preguntaFundamental}
+                </p>
+              </div>
+            </div>
+            
+            <div class="flex space-x-2">
+              <button onclick="verDetalles('${solicitud.id}')" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg text-sm transition flex items-center">
+                <i class="fas fa-eye mr-2"></i>
+                Ver
+              </button>
+              <button onclick="cambiarEstado('${solicitud.id}', 'contactado')" class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg text-sm transition flex items-center">
+                <i class="fas fa-phone mr-2"></i>
+                Contactar
+              </button>
+            </div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    // Ver detalles de la solicitud
+    function verDetalles(idSolicitud) {
+      const solicitudes = cargarSolicitudes();
+      const solicitud = solicitudes.find(s => s.id === idSolicitud);
+      
+      if (!solicitud) return;
+
+      const modalContent = document.getElementById('modal-content');
+      modalContent.innerHTML = `
+        <div class="space-y-6">
+          <!-- Información básica -->
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+              <h4 class="font-semibold text-gray-800 mb-3">Información de Contacto</h4>
+              <div class="space-y-2 text-sm">
+                <p><strong>Nombre:</strong> ${solicitud.datos.nombre}</p>
+                <p><strong>Email:</strong> ${solicitud.datos.email}</p>
+                <p><strong>Teléfono:</strong> ${solicitud.datos.telefono}</p>
+                <p><strong>País:</strong> ${solicitud.datos.pais}</p>
+                <p><strong>Servicio:</strong> <span class="px-2 py-1 rounded-full text-xs font-medium ${obtenerClaseServicio(solicitud.servicio)}">${obtenerTextoServicio(solicitud.servicio)}</span></p>
+                <p><strong>Estado:</strong> <span class="px-2 py-1 rounded-full text-xs font-medium ${obtenerClaseEstado(solicitud.estado)}">${obtenerTextoEstado(solicitud.estado)}</span></p>
+                <p><strong>Fecha:</strong> ${formatearFecha(solicitud.fecha)}</p>
+              </div>
+            </div>
+            
+            <div>
+              <h4 class="font-semibold text-gray-800 mb-3">Acciones Rápidas</h4>
+              <div class="space-y-2">
+                <button onclick="enviarWhatsApp('${solicitud.datos.telefono}')" class="w-full bg-green-500 hover:bg-green-600 text-white py-2 rounded-lg text-sm transition flex items-center justify-center">
+                  <i class="fab fa-whatsapp mr-2"></i>
+                  Contactar por WhatsApp
+                </button>
+                <button onclick="enviarEmail('${solicitud.datos.email}')" class="w-full bg-blue-500 hover:bg-blue-600 text-white py-2 rounded-lg text-sm transition flex items-center justify-center">
+                  <i class="fas fa-envelope mr-2"></i>
+                  Enviar Email
+                </button>
+                <button onclick="cambiarEstado('${solicitud.id}', '${solicitud.estado === 'nuevo' ? 'contactado' : 'proceso'}')" class="w-full bg-purple-500 hover:bg-purple-600 text-white py-2 rounded-lg text-sm transition flex items-center justify-center">
+                  <i class="fas fa-sync-alt mr-2"></i>
+                  Cambiar Estado
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Respuestas del formulario -->
+          <div class="space-y-4">
+            <h4 class="font-semibold text-gray-800">Respuestas del Formulario</h4>
+            
+            <div class="bg-gray-50 rounded-lg p-4">
+              <h5 class="font-medium text-gray-700 mb-2">Visión del Cambio</h5>
+              <p class="text-gray-600">${solicitud.datos.sinProblema}</p>
+            </div>
+
+            <div class="bg-gray-50 rounded-lg p-4">
+              <h5 class="font-medium text-gray-700 mb-2">La Dificultad</h5>
+              <p class="text-gray-600"><strong>Nombre:</strong> ${solicitud.datos.nombreDificultad}</p>
+              <p class="text-gray-600 mt-1"><strong>Tiempo presente:</strong> ${solicitud.datos.tiempoPresente}</p>
+            </div>
+
+            <div class="bg-gray-50 rounded-lg p-4">
+              <h5 class="font-medium text-gray-700 mb-2">Recursos y Fortalezas</h5>
+              <p class="text-gray-600"><strong>Cómo mantiene el control:</strong> ${solicitud.datos.comoControlas}</p>
+              <p class="text-gray-600 mt-1"><strong>Fortalezas percibidas:</strong> ${solicitud.datos.fortalezasOtros}</p>
+            </div>
+
+            <div class="bg-gray-50 rounded-lg p-4">
+              <h5 class="font-medium text-gray-700 mb-2">Decisión</h5>
+              <p class="text-gray-600"><strong>Opción elegida:</strong> ${solicitud.datos.opcionElegida === 'A' ? 'A - Seguir luchando para eliminar' : 'B - Llevarlo como compañero y avanzar'}</p>
+            </div>
+
+            <div class="bg-blue-50 rounded-lg p-4 border border-blue-200">
+              <h5 class="font-medium text-blue-700 mb-2">Pregunta Fundamental</h5>
+              <p class="text-blue-800 text-lg">${solicitud.datos.preguntaFundamental}</p>
+            </div>
+          </div>
+        </div>
+      `;
+
+      document.getElementById('modal-detalles').classList.remove('hidden');
+    }
+
+    // Cerrar modal
+    function cerrarModal() {
+      document.getElementById('modal-detalles').classList.add('hidden');
+    }
+
+    // Cambiar estado de la solicitud
+    function cambiarEstado(idSolicitud, nuevoEstado) {
+      // En una implementación real, esto actualizaría la base de datos
+      alert(`Estado cambiado a: ${obtenerTextoEstado(nuevoEstado)}`);
+      cerrarModal();
+      renderizarSolicitudes();
+    }
+
+    // Enviar WhatsApp
+    function enviarWhatsApp(telefono) {
+      const mensaje = `Hola, soy Hemir de Conversaciones con Sentido. Recibí tu solicitud y me encantaría conversar contigo. ¿Tienes un momento?`;
+      const url = `https://wa.me/${telefono.replace(/\D/g, '')}?text=${encodeURIComponent(mensaje)}`;
+      window.open(url, '_blank');
+    }
+
+    // Enviar Email
+    function enviarEmail(email) {
+      const asunto = 'Conversaciones con Sentido - Seguimiento de tu solicitud';
+      const cuerpo = `Hola,\n\nRecibí tu solicitud para Conversaciones con Sentido y me encantaría coordinar una conversación contigo.\n\n¿Podrías indicarme qué horarios te acomodan mejor?\n\nSaludos cordiales,\nHemir Ochoa\nConversaciones con Sentido`;
+      const url = `mailto:${email}?subject=${encodeURIComponent(asunto)}&body=${encodeURIComponent(cuerpo)}`;
+      window.location.href = url;
+    }
+
+    // Inicializar el dashboard
+    document.addEventListener('DOMContentLoaded', function() {
+      renderizarSolicitudes();
+      
+      // Actualizar cada 30 segundos (en una implementación real)
+      setInterval(renderizarSolicitudes, 30000);
+    });
+  </script>
+</body>
+</html>

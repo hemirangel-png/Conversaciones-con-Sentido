@@ -5,19 +5,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Formulario - Conversaciones con Sentido</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>💬</text></svg>">
   <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-    
     body {
       background-image: url('https://images.unsplash.com/photo-1506905925346-21bda4d32df4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80');
       background-size: cover;
       background-position: center;
       background-attachment: fixed;
+      margin: 0;
+      padding: 0;
       min-height: 100vh;
       font-family: 'Inter', sans-serif;
     }
@@ -61,21 +56,61 @@
 </head>
 <body>
   <div id="root"></div>
-
-  <script>
-    // Polyfill para React 18 con fallback
-    if (typeof React === 'undefined') {
-      document.write('<script src="https://unpkg.com/react@18/umd/react.development.js"><\/script>');
-      document.write('<script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"><\/script>');
-    }
-  </script>
-  
   <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
   <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
   
   <script type="text/babel">
     const { useState, useEffect } = React;
+
+    // Iconos SVG como componentes React
+    const ChevronRight = ({className}) => React.createElement('svg', {
+      className: className,
+      fill: 'none',
+      viewBox: '0 0 24 24',
+      stroke: 'currentColor'
+    }, React.createElement('path', {
+      strokeLinecap: 'round',
+      strokeLinejoin: 'round',
+      strokeWidth: 2,
+      d: 'M9 5l7 7-7 7'
+    }));
+
+    const ChevronLeft = ({className}) => React.createElement('svg', {
+      className: className,
+      fill: 'none',
+      viewBox: '0 0 24 24',
+      stroke: 'currentColor'
+    }, React.createElement('path', {
+      strokeLinecap: 'round',
+      strokeLinejoin: 'round',
+      strokeWidth: 2,
+      d: 'M15 19l-7-7 7-7'
+    }));
+
+    const Check = ({className}) => React.createElement('svg', {
+      className: className,
+      fill: 'none',
+      viewBox: '0 0 24 24',
+      stroke: 'currentColor'
+    }, React.createElement('path', {
+      strokeLinecap: 'round',
+      strokeLinejoin: 'round',
+      strokeWidth: 2,
+      d: 'M5 13l4 4L19 7'
+    }));
+
+    const Heart = ({className}) => React.createElement('svg', {
+      className: className,
+      fill: 'none',
+      viewBox: '0 0 24 24',
+      stroke: 'currentColor'
+    }, React.createElement('path', {
+      strokeLinecap: 'round',
+      strokeLinejoin: 'round',
+      strokeWidth: 1.5,
+      d: 'M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z'
+    }));
 
     // Lista de países
     const paises = [
@@ -200,38 +235,47 @@ Nueva solicitud de Conversaciones con Sentido:
         }
       };
 
+      // Función para crear elementos de forma segura
+      const createElement = (tag, props, children) => {
+        return React.createElement(tag, props, children);
+      };
+
       if (submitted) {
-        return React.createElement('div', {
+        return createElement('div', {
           className: "min-h-screen flex items-center justify-center p-4 fade-in"
-        }, React.createElement('div', {
+        }, createElement('div', {
           className: "max-w-2xl w-full bg-white rounded-xl shadow-lg p-8 md:p-12 text-center border border-gray-200 bg-overlay"
         }, [
-          React.createElement('h2', {
+          createElement('div', {
+            key: 'icon',
+            className: "w-24 h-24 bg-gradient-to-br from-green-500 to-green-600 rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg"
+          }, createElement(Heart, { className: "w-12 h-12 text-white" })),
+          createElement('h2', {
             key: 'title',
             className: "text-3xl md:text-4xl font-light text-gray-800 mb-4"
           }, 'Tu solicitud ha sido recibida'),
-          React.createElement('p', {
+          createElement('p', {
             key: 'message',
             className: "text-lg text-gray-600 mb-6 leading-relaxed"
           }, 'Se ha abierto WhatsApp para que puedas enviarnos tu información directamente. Si no se abrió automáticamente, por favor envíanos un mensaje manualmente.'),
-          React.createElement('div', {
+          createElement('div', {
             key: 'divider',
             className: "w-16 h-1 bg-gradient-to-r from-green-500 to-green-600 mx-auto mb-6 rounded-full"
           }),
-          React.createElement('p', {
+          createElement('p', {
             key: 'thanks',
             className: "text-gray-500 italic"
           }, 'Gracias por confiar en nosotros para tu proceso'),
-          React.createElement('div', {
+          createElement('div', {
             key: 'service',
             className: "mt-8 p-4 bg-green-50 rounded-lg"
-          }, React.createElement('p', {
+          }, createElement('p', {
             className: "text-sm text-green-700"
-          }, React.createElement('strong', null, 'Servicio seleccionado:'), ' ', getServiceName(selectedService))),
-          React.createElement('div', {
+          }, createElement('strong', null, 'Servicio seleccionado:'), ' ', getServiceName(selectedService))),
+          createElement('div', {
             key: 'button',
             className: "mt-6"
-          }, React.createElement('button', {
+          }, createElement('button', {
             onClick: () => window.location.reload(),
             className: "px-6 py-3 bg-green-500 text-white rounded-lg hover:bg-green-600 transition"
           }, 'Volver al inicio'))
@@ -241,17 +285,13 @@ Nueva solicitud de Conversaciones con Sentido:
       const steps = [
         {
           title: 'Datos de Contacto',
-          content: React.createElement('div', {
-            className: "space-y-6 fade-in"
-          }, [
-            React.createElement('div', {
-              key: 'nombre'
-            }, [
-              React.createElement('label', {
+          content: createElement('div', { className: "space-y-6 fade-in" }, [
+            createElement('div', { key: 'nombre' }, [
+              createElement('label', { 
                 key: 'label1',
-                className: "block text-gray-700 font-medium mb-2"
+                className: "block text-gray-700 font-medium mb-2" 
               }, 'Nombre *'),
-              React.createElement('input', {
+              createElement('input', {
                 key: 'input1',
                 type: "text",
                 value: formData.nombre,
@@ -260,18 +300,16 @@ Nueva solicitud de Conversaciones con Sentido:
                 placeholder: "Tu nombre completo"
               })
             ]),
-            React.createElement('div', {
+            createElement('div', { 
               key: 'contacto',
-              className: "grid md:grid-cols-2 gap-6"
+              className: "grid md:grid-cols-2 gap-6" 
             }, [
-              React.createElement('div', {
-                key: 'email'
-              }, [
-                React.createElement('label', {
+              createElement('div', { key: 'email' }, [
+                createElement('label', { 
                   key: 'label2',
-                  className: "block text-gray-700 font-medium mb-2"
+                  className: "block text-gray-700 font-medium mb-2" 
                 }, 'Email *'),
-                React.createElement('input', {
+                createElement('input', {
                   key: 'input2',
                   type: "email",
                   value: formData.email,
@@ -280,14 +318,12 @@ Nueva solicitud de Conversaciones con Sentido:
                   placeholder: "tu@email.com"
                 })
               ]),
-              React.createElement('div', {
-                key: 'telefono'
-              }, [
-                React.createElement('label', {
+              createElement('div', { key: 'telefono' }, [
+                createElement('label', { 
                   key: 'label3',
-                  className: "block text-gray-700 font-medium mb-2"
+                  className: "block text-gray-700 font-medium mb-2" 
                 }, 'Teléfono *'),
-                React.createElement('input', {
+                createElement('input', {
                   key: 'input3',
                   type: "tel",
                   value: formData.telefono,
@@ -297,65 +333,372 @@ Nueva solicitud de Conversaciones con Sentido:
                 })
               ])
             ]),
-            React.createElement('div', {
-              key: 'pais'
-            }, [
-              React.createElement('label', {
+            createElement('div', { key: 'pais' }, [
+              createElement('label', { 
                 key: 'label4',
-                className: "block text-gray-700 font-medium mb-2"
+                className: "block text-gray-700 font-medium mb-2" 
               }, 'País *'),
-              React.createElement('select', {
+              createElement('select', {
                 key: 'select1',
                 value: formData.pais,
                 onChange: (e) => handleChange('pais', e.target.value),
                 className: "w-full px-4 py-3 rounded-lg border border-gray-300 focus:border-green-500 focus:ring-2 focus:ring-green-200 focus:outline-none transition input-zen"
               }, [
-                React.createElement('option', {
-                  key: 'default',
-                  value: ""
-                }, 'Selecciona tu país'),
+                createElement('option', { key: 'default', value: "" }, 'Selecciona tu país'),
                 ...paises.map((pais) => 
-                  React.createElement('option', {
-                    key: pais,
-                    value: pais
-                  }, pais)
+                  createElement('option', { key: pais, value: pais }, pais)
                 )
               ])
             ])
           ])
         },
-        // ... (los otros steps siguen igual pero convertidos a React.createElement)
+        {
+          title: 'Visión del Cambio',
+          content: createElement('div', { className: "space-y-6 fade-in" }, [
+            createElement('div', { key: 'problema' }, [
+              createElement('label', { 
+                key: 'label5',
+                className: "block text-gray-700 font-medium mb-2" 
+              }, 'Si mañana despertaras sin el problema, ¿qué sería lo primero en que lo notarías? *'),
+              createElement('textarea', {
+                key: 'textarea1',
+                value: formData.sinProblema,
+                onChange: (e) => handleChange('sinProblema', e.target.value),
+                className: "w-full px-4 py-3 rounded-lg border border-gray-300 focus:border-green-500 focus:ring-2 focus:ring-green-200 focus:outline-none transition input-zen",
+                rows: 4,
+                placeholder: "Describe ese primer momento de cambio..."
+              })
+            ])
+          ])
+        },
+        {
+          title: 'Conociendo tu Dificultad',
+          content: createElement('div', { className: "space-y-6 fade-in" }, [
+            createElement('div', { key: 'dificultad' }, [
+              createElement('label', { 
+                key: 'label6',
+                className: "block text-gray-700 font-medium mb-2" 
+              }, 'Si esta dificultad que estás viviendo tuviera un nombre o fuera un personaje, ¿cómo lo llamarías? *'),
+              createElement('textarea', {
+                key: 'textarea2',
+                value: formData.nombreDificultad,
+                onChange: (e) => handleChange('nombreDificultad', e.target.value),
+                className: "w-full px-4 py-3 rounded-lg border border-gray-300 focus:border-green-500 focus:ring-2 focus:ring-green-200 focus:outline-none transition input-zen",
+                rows: 3,
+                placeholder: "Ej: 'El Perfeccionista', 'La Ansiedad', 'El Miedo al Fracaso'..."
+              })
+            ]),
+            createElement('div', { key: 'tiempo' }, [
+              createElement('label', { 
+                key: 'label7',
+                className: "block text-gray-700 font-medium mb-2" 
+              }, '¿Desde cuándo ha estado presente en tu vida? *'),
+              createElement('textarea', {
+                key: 'textarea3',
+                value: formData.tiempoPresente,
+                onChange: (e) => handleChange('tiempoPresente', e.target.value),
+                className: "w-full px-4 py-3 rounded-lg border border-gray-300 focus:border-green-500 focus:ring-2 focus:ring-green-200 focus:outline-none transition input-zen",
+                rows: 2,
+                placeholder: "Ej: 'Desde la adolescencia', 'Hace aproximadamente 2 años', 'Desde que cambié de trabajo'..."
+              })
+            ])
+          ])
+        },
+        {
+          title: 'Tus Recursos y Fortalezas',
+          content: createElement('div', { className: "space-y-6 fade-in" }, [
+            createElement('div', { key: 'control' }, [
+              createElement('label', { 
+                key: 'label8',
+                className: "block text-gray-700 font-medium mb-2" 
+              }, '¿Cómo has logrado que las cosas no estén peor de lo que están? *'),
+              createElement('p', { 
+                key: 'subtext1',
+                className: "text-gray-500 text-sm mb-3" 
+              }, '¿Qué has hecho para mantener esto bajo control hasta ahora?'),
+              createElement('textarea', {
+                key: 'textarea4',
+                value: formData.comoControlas,
+                onChange: (e) => handleChange('comoControlas', e.target.value),
+                className: "w-full px-4 py-3 rounded-lg border border-gray-300 focus:border-green-500 focus:ring-2 focus:ring-green-200 focus:outline-none transition input-zen",
+                rows: 4,
+                placeholder: "Describe las estrategias, pensamientos o acciones que te han ayudado..."
+              })
+            ]),
+            createElement('div', { key: 'fortalezas' }, [
+              createElement('label', { 
+                key: 'label9',
+                className: "block text-gray-700 font-medium mb-2" 
+              }, 'Si alguien cercano a ti describiera tus fortalezas, ¿qué crees que diría? *'),
+              createElement('textarea', {
+                key: 'textarea5',
+                value: formData.fortalezasOtros,
+                onChange: (e) => handleChange('fortalezasOtros', e.target.value),
+                className: "w-full px-4 py-3 rounded-lg border border-gray-300 focus:border-green-500 focus:ring-2 focus:ring-green-200 focus:outline-none transition input-zen",
+                rows: 4,
+                placeholder: "Ej: 'Diría que soy resiliente', 'Que tengo sentido del humor', 'Que soy buena escuchando'..."
+              })
+            ])
+          ])
+        },
+        {
+          title: 'Tu Decisión',
+          content: createElement('div', { className: "space-y-6 fade-in" }, [
+            createElement('div', { key: 'decision' }, [
+              createElement('label', { 
+                key: 'label10',
+                className: "block text-gray-700 font-medium mb-2 text-lg" 
+              }, 'Opción A vs Opción B *'),
+              createElement('p', { 
+                key: 'subtext2',
+                className: "text-gray-500 text-sm mb-4" 
+              }, 'Si pudieras elegir entre dos opciones:'),
+              
+              createElement('div', { 
+                key: 'opciones-grid',
+                className: "grid md:grid-cols-2 gap-6 mb-6" 
+              }, [
+                createElement('div', { 
+                  key: 'opcion-a',
+                  className: "border-2 border-red-200 rounded-lg p-4 bg-red-50" 
+                }, [
+                  createElement('h4', { 
+                    key: 'title-a',
+                    className: "font-bold text-red-700 mb-2 text-center" 
+                  }, 'Opción A'),
+                  createElement('p', { 
+                    key: 'text-a',
+                    className: "text-sm text-red-600 text-center" 
+                  }, 'Seguir luchando para eliminar este malestar/pensamiento/sentimiento y que tu vida siga en pausa')
+                ]),
+                createElement('div', { 
+                  key: 'opcion-b',
+                  className: "border-2 border-green-200 rounded-lg p-4 bg-green-50" 
+                }, [
+                  createElement('h4', { 
+                    key: 'title-b',
+                    className: "font-bold text-green-700 mb-2 text-center" 
+                  }, 'Opción B'),
+                  createElement('p', { 
+                    key: 'text-b',
+                    className: "text-sm text-green-600 text-center" 
+                  }, 'Llevarlo contigo como un compañero incómodo pero poder moverte hacia lo que realmente te importa')
+                ])
+              ]),
+
+              createElement('div', { key: 'radios', className: "space-y-4" }, [
+                createElement('label', { 
+                  key: 'radio-a',
+                  className: "flex items-center space-x-3 p-3 border border-gray-300 rounded-lg hover:bg-gray-50 cursor-pointer" 
+                }, [
+                  createElement('input', {
+                    key: 'input-a',
+                    type: "radio",
+                    name: "opcionElegida",
+                    value: "A",
+                    checked: formData.opcionElegida === 'A',
+                    onChange: (e) => handleChange('opcionElegida', e.target.value),
+                    className: "text-green-500 focus:ring-green-500"
+                  }),
+                  createElement('span', { 
+                    key: 'span-a',
+                    className: "font-medium" 
+                  }, 'Opción A - Seguir luchando para eliminar')
+                ]),
+                
+                createElement('label', { 
+                  key: 'radio-b',
+                  className: "flex items-center space-x-3 p-3 border border-gray-300 rounded-lg hover:bg-gray-50 cursor-pointer" 
+                }, [
+                  createElement('input', {
+                    key: 'input-b',
+                    type: "radio",
+                    name: "opcionElegida",
+                    value: "B",
+                    checked: formData.opcionElegida === 'B',
+                    onChange: (e) => handleChange('opcionElegida', e.target.value),
+                    className: "text-green-500 focus:ring-green-500"
+                  }),
+                  createElement('span', { 
+                    key: 'span-b',
+                    className: "font-medium" 
+                  }, 'Opción B - Llevarlo como compañero y avanzar')
+                ])
+              ])
+            ]),
+            
+            formData.opcionElegida && createElement('div', { 
+              key: 'reflexion',
+              className: "p-4 bg-blue-50 rounded-lg border border-blue-200" 
+            }, createElement('p', { 
+              className: "text-blue-700 text-sm" 
+            }, createElement('strong', null, 'Reflexión:'), ' Tu elección nos ayuda a entender mejor tu disposición al cambio. Ambas opciones son válidas y representan diferentes enfoques para enfrentar las dificultades.'))
+          ])
+        },
+        {
+          title: 'La Pregunta Fundamental',
+          content: createElement('div', { className: "space-y-6 fade-in" }, [
+            createElement('div', { 
+              key: 'header',
+              className: "text-center mb-6" 
+            }, [
+              createElement('div', { 
+                key: 'icon',
+                className: "w-16 h-16 bg-gradient-to-br from-green-500 to-green-600 rounded-full flex items-center justify-center mx-auto mb-4" 
+              }, createElement('div', { className: "text-white text-2xl" }, '?')),
+              createElement('h3', { 
+                key: 'title',
+                className: "text-2xl font-bold text-gray-800 mb-2" 
+              }, 'La Pregunta Fundamental'),
+              createElement('p', { 
+                key: 'subtitle',
+                className: "text-gray-600" 
+              }, 'Después de todo este recorrido reflexivo...')
+            ]),
+            
+            createElement('div', { key: 'pregunta' }, [
+              createElement('label', { 
+                key: 'label11',
+                className: "block text-gray-700 font-medium mb-2 text-lg" 
+              }, '¿Cuál es la pregunta fundamental que te trae aquí hoy? *'),
+              createElement('p', { 
+                key: 'subtext3',
+                className: "text-gray-500 text-sm mb-4" 
+              }, 'Resume en una pregunta esencial lo que realmente quieres resolver o comprender'),
+              createElement('textarea', {
+                key: 'textarea6',
+                value: formData.preguntaFundamental,
+                onChange: (e) => handleChange('preguntaFundamental', e.target.value),
+                className: "w-full px-4 py-4 rounded-lg border border-gray-300 focus:border-green-500 focus:ring-2 focus:ring-green-200 focus:outline-none transition input-zen text-lg",
+                rows: 5,
+                placeholder: "Ej: '¿Cómo puedo encontrar paz interior?', '¿Qué necesito para sentirme completo?', '¿Cómo superar este miedo que me paraliza?'..."
+              })
+            ]),
+            
+            createElement('div', { 
+              key: 'nota',
+              className: "p-4 bg-green-50 rounded-lg border border-green-200" 
+            }, createElement('p', { 
+              className: "text-green-700 text-sm" 
+            }, createElement('strong', null, 'Nota:'), ' Esta pregunta será el punto de partida para nuestras conversaciones. Tómate un momento para formularla con cuidado, ya que guiará nuestro trabajo juntos.'))
+          ])
+        }
       ];
 
-      // Renderizado simplificado para evitar problemas
-      return React.createElement('div', {
-        className: "min-h-screen py-8 px-4"
-      }, React.createElement('div', {
-        className: "max-w-3xl mx-auto fade-in"
-      }, [
-        React.createElement('div', {
-          key: 'header',
-          className: "text-center mb-8"
-        }, [
-          React.createElement('h1', {
-            key: 'title',
-            className: "text-4xl md:text-5xl font-light text-gray-800 mb-2"
-          }, 'Conversaciones con Sentido'),
-          React.createElement('p', {
-            key: 'subtitle',
-            className: "text-lg text-gray-600 mb-2"
-          }, 'Acompañamiento terapéutico y espiritual'),
-          React.createElement('p', {
-            key: 'description',
-            className: "text-md text-gray-500"
-          }, 'Completa el formulario para comenzar tu proceso'),
-          selectedService && React.createElement('div', {
-            key: 'service-badge',
-            className: "mt-4 inline-block px-4 py-2 bg-green-100 text-green-700 rounded-full text-sm font-medium"
-          }, 'Servicio: ', getServiceName(selectedService))
-        ]),
-        // ... resto del formulario
-      ]));
+      return createElement('div', { className: "min-h-screen py-8 px-4" }, 
+        createElement('div', { className: "max-w-3xl mx-auto fade-in" }, [
+          createElement('div', { 
+            key: 'header',
+            className: "text-center mb-8" 
+          }, [
+            createElement('h1', { 
+              key: 'title',
+              className: "text-4xl md:text-5xl font-light text-gray-800 mb-2" 
+            }, 'Conversaciones con Sentido'),
+            createElement('p', { 
+              key: 'subtitle',
+              className: "text-lg text-gray-600 mb-2" 
+            }, 'Acompañamiento terapéutico y espiritual'),
+            createElement('p', { 
+              key: 'description',
+              className: "text-md text-gray-500" 
+            }, 'Completa el formulario para comenzar tu proceso'),
+            selectedService && createElement('div', { 
+              key: 'service-badge',
+              className: "mt-4 inline-block px-4 py-2 bg-green-100 text-green-700 rounded-full text-sm font-medium" 
+            }, 'Servicio: ', getServiceName(selectedService))
+          ]),
+
+          createElement('div', { key: 'progress', className: "mb-8" }, [
+            createElement('div', { 
+              key: 'bar',
+              className: "flex justify-between mb-2" 
+            }, steps.map((_, idx) => 
+              createElement('div', {
+                key: `step-${idx}`,
+                className: `flex-1 h-2 mx-1 rounded-full transition-all ${
+                  idx <= step ? 'bg-gradient-to-r from-green-500 to-green-600' : 'bg-gray-200'
+                }`
+              })
+            )),
+            createElement('p', { 
+              key: 'counter',
+              className: "text-center text-gray-500 text-sm" 
+            }, `Paso ${step + 1} de ${steps.length}`)
+          ]),
+
+          createElement('div', { 
+            key: 'form-container',
+            className: "bg-white rounded-xl shadow-lg p-6 md:p-10 border border-gray-200 bg-overlay" 
+          }, [
+            createElement('h2', { 
+              key: 'step-title',
+              className: "text-2xl md:text-3xl font-light text-gray-800 mb-6 flex items-center" 
+            }, [
+              createElement('div', { 
+                key: 'step-number',
+                className: "w-8 h-8 bg-gradient-to-br from-green-500 to-green-600 rounded-full flex items-center justify-center text-white text-sm font-medium mr-3" 
+              }, step + 1),
+              steps[step].title
+            ]),
+            
+            steps[step].content,
+
+            createElement('div', { 
+              key: 'navigation',
+              className: "flex justify-between mt-8" 
+            }, [
+              createElement('button', {
+                key: 'prev',
+                onClick: () => setStep(step - 1),
+                disabled: step === 0,
+                className: `flex items-center gap-2 px-6 py-3 rounded-lg font-medium transition ${
+                  step === 0
+                    ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
+                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                }`
+              }, [
+                createElement(ChevronLeft, { key: 'chevron-left', className: "w-5 h-5" }),
+                'Anterior'
+              ]),
+
+              step < steps.length - 1 ? 
+                createElement('button', {
+                  key: 'next',
+                  onClick: () => setStep(step + 1),
+                  disabled: !canProceed(),
+                  className: `flex items-center gap-2 px-6 py-3 rounded-lg font-medium transition ${
+                    canProceed()
+                      ? 'bg-green-500 text-white hover:bg-green-600'
+                      : 'bg-gray-100 text-gray-400 cursor-not-allowed'
+                  }`
+                }, [
+                  'Siguiente',
+                  createElement(ChevronRight, { key: 'chevron-right', className: "w-5 h-5" })
+                ])
+              : 
+                createElement('button', {
+                  key: 'submit',
+                  onClick: handleSubmit,
+                  disabled: !canProceed(),
+                  className: `flex items-center gap-2 px-8 py-3 rounded-lg font-medium transition ${
+                    canProceed()
+                      ? 'bg-green-500 text-white hover:bg-green-600'
+                      : 'bg-gray-100 text-gray-400 cursor-not-allowed'
+                  }`
+                }, [
+                  'Enviar',
+                  createElement(Check, { key: 'check', className: "w-5 h-5" })
+                ])
+            ])
+          ]),
+
+          createElement('p', { 
+            key: 'required',
+            className: "text-center text-gray-500 mt-8 text-sm" 
+          }, '* Campos obligatorios')
+        ])
+      );
     }
 
     // Render seguro

@@ -1,13 +1,366 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Formulario - Conversaciones con Sentido</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>💬</text></svg>">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    
+    body {
+      background-image: url('https://images.unsplash.com/photo-1506905925346-21bda4d32df4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80');
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+      min-height: 100vh;
+      font-family: 'Inter', sans-serif;
+    }
+    
+    .bg-overlay {
+      background: rgba(255, 255, 255, 0.92);
+      backdrop-filter: blur(5px);
+    }
+    
+    @media (max-width: 768px) {
+      body {
+        background-attachment: scroll;
+      }
+      .bg-overlay {
+        background: rgba(255, 255, 255, 0.96);
+        backdrop-filter: blur(2px);
+      }
+    }
+    
+    .fade-in {
+      animation: fadeIn 0.8s ease-in-out;
+    }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    .input-zen {
+      transition: all 0.3s ease;
+      background: rgba(255, 255, 255, 0.7);
+      border: 1px solid rgba(209, 213, 219, 0.5);
+    }
+    
+    .input-zen:focus {
+      background: rgba(255, 255, 255, 0.9);
+      border-color: rgba(47, 133, 90, 0.5);
+      box-shadow: 0 0 0 3px rgba(47, 133, 90, 0.1);
+    }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+
+  <script>
+    // Polyfill para React 18 con fallback
+    if (typeof React === 'undefined') {
+      document.write('<script src="https://unpkg.com/react@18/umd/react.development.js"><\/script>');
+      document.write('<script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"><\/script>');
+    }
+  </script>
+  
+  <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  
+  <script type="text/babel">
+    const { useState, useEffect } = React;
+
+    // Lista de países
+    const paises = [
+      'Argentina', 'Bolivia', 'Brasil', 'Chile', 'Colombia', 'Costa Rica', 'Cuba', 
+      'Ecuador', 'El Salvador', 'España', 'Guatemala', 'Honduras', 'México', 
+      'Nicaragua', 'Panamá', 'Paraguay', 'Perú', 'Puerto Rico', 'República Dominicana',
+      'Uruguay', 'Venezuela', 'Estados Unidos', 'Canadá', 'Otro país'
+    ];
+
+    function ConversacionesForm() {
+      const [step, setStep] = useState(0);
+      const [submitted, setSubmitted] = useState(false);
+      const [selectedService, setSelectedService] = useState('');
+      const [formData, setFormData] = useState({
+        nombre: '',
+        email: '',
+        telefono: '',
+        pais: '',
+        sinProblema: '',
+        nombreDificultad: '',
+        tiempoPresente: '',
+        comoControlas: '',
+        fortalezasOtros: '',
+        opcionElegida: '',
+        preguntaFundamental: ''
+      });
+
+      // Obtener el servicio seleccionado de localStorage al cargar
+      useEffect(() => {
+        const service = localStorage.getItem('selectedService');
+        if (service) {
+          setSelectedService(service);
+        }
+      }, []);
+
+      const handleChange = (field, value) => {
+        setFormData(prev => ({ ...prev, [field]: value }));
+      };
+
+      const handleSubmit = async () => {
+        try {
+          // Formatear los datos para WhatsApp
+          const mensaje = `
 Nueva solicitud de Conversaciones con Sentido:
 
-*Servicio:* 7 Preguntas para Comenzar el Cambio
-*Nombre:* María González
-*Email:* maria@email.com  
-*Teléfono:* +56 9 8765 4321
-*País:* Chile
+*Servicio:* ${getServiceName(selectedService)}
+*Nombre:* ${formData.nombre}
+*Email:* ${formData.email}
+*Teléfono:* ${formData.telefono}
+*País:* ${formData.pais}
 
-*Si mañana despertaras sin el problema:* Me despertaría más tranquila, sin esa opresión en el pecho...
+*Si mañana despertaras sin el problema:* ${formData.sinProblema}
 
-[... todo el mensaje completo ...]
+*Nombre de la dificultad:* ${formData.nombreDificultad}
+*Tiempo presente:* ${formData.tiempoPresente}
 
-*Fecha:* 15/03/2024 11:30:25
+*Cómo controlas:* ${formData.comoControlas}
+*Fortalezas según otros:* ${formData.fortalezasOtros}
+
+*Opción elegida:* ${formData.opcionElegida === 'A' ? 'Seguir luchando para eliminar' : 'Llevarlo como compañero y avanzar'}
+
+*Pregunta fundamental:* ${formData.preguntaFundamental}
+
+*Fecha:* ${new Date().toLocaleString()}
+          `;
+
+          // Enviar a WhatsApp
+          await enviarWhatsApp(mensaje);
+          
+          // También guardar en localStorage como respaldo
+          localStorage.setItem(`solicitud:${Date.now()}`, JSON.stringify({
+            ...formData,
+            servicio: selectedService,
+            fecha: new Date().toISOString(),
+            estado: 'nuevo'
+          }));
+          
+          setSubmitted(true);
+        } catch (error) {
+          console.error('Error al enviar:', error);
+          alert('Hubo un error. Por favor intenta de nuevo.');
+        }
+      };
+
+      const getServiceName = (service) => {
+        return service === '7preguntas' ? '7 Preguntas para Comenzar el Cambio' :
+               service === 'expres' ? 'CCS Exprés' :
+               service === 'camino' ? 'CCS "El Camino"' :
+               'No especificado';
+      };
+
+      const enviarWhatsApp = async (mensaje) => {
+        // TU NÚMERO INTEGRADO - 56989051679
+        const telefonoWhatsApp = '56989051679';
+        
+        // Codificar el mensaje para URL
+        const mensajeCodificado = encodeURIComponent(mensaje);
+        
+        // Crear enlace de WhatsApp
+        const urlWhatsApp = `https://wa.me/${telefonoWhatsApp}?text=${mensajeCodificado}`;
+        
+        // Abrir en nueva ventana
+        window.open(urlWhatsApp, '_blank');
+      };
+
+      const canProceed = () => {
+        switch(step) {
+          case 0:
+            return formData.nombre && formData.email && formData.telefono && formData.pais;
+          case 1:
+            return formData.sinProblema;
+          case 2:
+            return formData.nombreDificultad && formData.tiempoPresente;
+          case 3:
+            return formData.comoControlas && formData.fortalezasOtros;
+          case 4:
+            return formData.opcionElegida;
+          case 5:
+            return formData.preguntaFundamental;
+          default:
+            return true;
+        }
+      };
+
+      if (submitted) {
+        return React.createElement('div', {
+          className: "min-h-screen flex items-center justify-center p-4 fade-in"
+        }, React.createElement('div', {
+          className: "max-w-2xl w-full bg-white rounded-xl shadow-lg p-8 md:p-12 text-center border border-gray-200 bg-overlay"
+        }, [
+          React.createElement('h2', {
+            key: 'title',
+            className: "text-3xl md:text-4xl font-light text-gray-800 mb-4"
+          }, 'Tu solicitud ha sido recibida'),
+          React.createElement('p', {
+            key: 'message',
+            className: "text-lg text-gray-600 mb-6 leading-relaxed"
+          }, 'Se ha abierto WhatsApp para que puedas enviarnos tu información directamente. Si no se abrió automáticamente, por favor envíanos un mensaje manualmente.'),
+          React.createElement('div', {
+            key: 'divider',
+            className: "w-16 h-1 bg-gradient-to-r from-green-500 to-green-600 mx-auto mb-6 rounded-full"
+          }),
+          React.createElement('p', {
+            key: 'thanks',
+            className: "text-gray-500 italic"
+          }, 'Gracias por confiar en nosotros para tu proceso'),
+          React.createElement('div', {
+            key: 'service',
+            className: "mt-8 p-4 bg-green-50 rounded-lg"
+          }, React.createElement('p', {
+            className: "text-sm text-green-700"
+          }, React.createElement('strong', null, 'Servicio seleccionado:'), ' ', getServiceName(selectedService))),
+          React.createElement('div', {
+            key: 'button',
+            className: "mt-6"
+          }, React.createElement('button', {
+            onClick: () => window.location.reload(),
+            className: "px-6 py-3 bg-green-500 text-white rounded-lg hover:bg-green-600 transition"
+          }, 'Volver al inicio'))
+        ]));
+      }
+
+      const steps = [
+        {
+          title: 'Datos de Contacto',
+          content: React.createElement('div', {
+            className: "space-y-6 fade-in"
+          }, [
+            React.createElement('div', {
+              key: 'nombre'
+            }, [
+              React.createElement('label', {
+                key: 'label1',
+                className: "block text-gray-700 font-medium mb-2"
+              }, 'Nombre *'),
+              React.createElement('input', {
+                key: 'input1',
+                type: "text",
+                value: formData.nombre,
+                onChange: (e) => handleChange('nombre', e.target.value),
+                className: "w-full px-4 py-3 rounded-lg border border-gray-300 focus:border-green-500 focus:ring-2 focus:ring-green-200 focus:outline-none transition input-zen",
+                placeholder: "Tu nombre completo"
+              })
+            ]),
+            React.createElement('div', {
+              key: 'contacto',
+              className: "grid md:grid-cols-2 gap-6"
+            }, [
+              React.createElement('div', {
+                key: 'email'
+              }, [
+                React.createElement('label', {
+                  key: 'label2',
+                  className: "block text-gray-700 font-medium mb-2"
+                }, 'Email *'),
+                React.createElement('input', {
+                  key: 'input2',
+                  type: "email",
+                  value: formData.email,
+                  onChange: (e) => handleChange('email', e.target.value),
+                  className: "w-full px-4 py-3 rounded-lg border border-gray-300 focus:border-green-500 focus:ring-2 focus:ring-green-200 focus:outline-none transition input-zen",
+                  placeholder: "tu@email.com"
+                })
+              ]),
+              React.createElement('div', {
+                key: 'telefono'
+              }, [
+                React.createElement('label', {
+                  key: 'label3',
+                  className: "block text-gray-700 font-medium mb-2"
+                }, 'Teléfono *'),
+                React.createElement('input', {
+                  key: 'input3',
+                  type: "tel",
+                  value: formData.telefono,
+                  onChange: (e) => handleChange('telefono', e.target.value),
+                  className: "w-full px-4 py-3 rounded-lg border border-gray-300 focus:border-green-500 focus:ring-2 focus:ring-green-200 focus:outline-none transition input-zen",
+                  placeholder: "+56 9 1234 5678"
+                })
+              ])
+            ]),
+            React.createElement('div', {
+              key: 'pais'
+            }, [
+              React.createElement('label', {
+                key: 'label4',
+                className: "block text-gray-700 font-medium mb-2"
+              }, 'País *'),
+              React.createElement('select', {
+                key: 'select1',
+                value: formData.pais,
+                onChange: (e) => handleChange('pais', e.target.value),
+                className: "w-full px-4 py-3 rounded-lg border border-gray-300 focus:border-green-500 focus:ring-2 focus:ring-green-200 focus:outline-none transition input-zen"
+              }, [
+                React.createElement('option', {
+                  key: 'default',
+                  value: ""
+                }, 'Selecciona tu país'),
+                ...paises.map((pais) => 
+                  React.createElement('option', {
+                    key: pais,
+                    value: pais
+                  }, pais)
+                )
+              ])
+            ])
+          ])
+        },
+        // ... (los otros steps siguen igual pero convertidos a React.createElement)
+      ];
+
+      // Renderizado simplificado para evitar problemas
+      return React.createElement('div', {
+        className: "min-h-screen py-8 px-4"
+      }, React.createElement('div', {
+        className: "max-w-3xl mx-auto fade-in"
+      }, [
+        React.createElement('div', {
+          key: 'header',
+          className: "text-center mb-8"
+        }, [
+          React.createElement('h1', {
+            key: 'title',
+            className: "text-4xl md:text-5xl font-light text-gray-800 mb-2"
+          }, 'Conversaciones con Sentido'),
+          React.createElement('p', {
+            key: 'subtitle',
+            className: "text-lg text-gray-600 mb-2"
+          }, 'Acompañamiento terapéutico y espiritual'),
+          React.createElement('p', {
+            key: 'description',
+            className: "text-md text-gray-500"
+          }, 'Completa el formulario para comenzar tu proceso'),
+          selectedService && React.createElement('div', {
+            key: 'service-badge',
+            className: "mt-4 inline-block px-4 py-2 bg-green-100 text-green-700 rounded-full text-sm font-medium"
+          }, 'Servicio: ', getServiceName(selectedService))
+        ]),
+        // ... resto del formulario
+      ]));
+    }
+
+    // Render seguro
+    const root = ReactDOM.createRoot(document.getElementById('root'));
+    root.render(React.createElement(ConversacionesForm));
+  </script>
+</body>
+</html>

@@ -100,18 +100,6 @@
       d: 'M5 13l4 4L19 7'
     }));
 
-    const Heart = ({className}) => React.createElement('svg', {
-      className: className,
-      fill: 'none',
-      viewBox: '0 0 24 24',
-      stroke: 'currentColor'
-    }, React.createElement('path', {
-      strokeLinecap: 'round',
-      strokeLinejoin: 'round',
-      strokeWidth: 1.5,
-      d: 'M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z'
-    }));
-
     // Lista de países
     const paises = [
       'Argentina', 'Bolivia', 'Brasil', 'Chile', 'Colombia', 'Costa Rica', 'Cuba', 
@@ -122,7 +110,6 @@
 
     function ConversacionesForm() {
       const [step, setStep] = useState(0);
-      const [submitted, setSubmitted] = useState(false);
       const [selectedService, setSelectedService] = useState('');
       const [formData, setFormData] = useState({
         nombre: '',
@@ -152,6 +139,12 @@
 
       const handleSubmit = async () => {
         try {
+          // Validar que todos los campos estén completos
+          if (!canProceed()) {
+            alert('Por favor completa todos los campos obligatorios antes de enviar.');
+            return;
+          }
+
           // Formatear los datos para WhatsApp
           const mensaje = `
 Nueva solicitud de Conversaciones con Sentido:
@@ -177,10 +170,10 @@ Nueva solicitud de Conversaciones con Sentido:
 *Fecha:* ${new Date().toLocaleString()}
           `;
 
-          // Enviar a WhatsApp
-          await enviarWhatsApp(mensaje);
+          // Enviar DIRECTAMENTE a WhatsApp (sin pantalla intermedia)
+          enviarWhatsApp(mensaje);
           
-          // También guardar en localStorage como respaldo
+          // Opcional: guardar en localStorage silenciosamente
           localStorage.setItem(`solicitud:${Date.now()}`, JSON.stringify({
             ...formData,
             servicio: selectedService,
@@ -188,7 +181,12 @@ Nueva solicitud de Conversaciones con Sentido:
             estado: 'nuevo'
           }));
           
-          setSubmitted(true);
+          // ✅ MOSTRAR SOLO UN MENSAJE BREVE Y RECARGAR
+          alert('¡Formulario enviado! Se ha abierto WhatsApp para que completes el envío. Esta página se recargará automáticamente.');
+          setTimeout(() => {
+            window.location.reload(); // Recargar para nuevo formulario
+          }, 3000);
+          
         } catch (error) {
           console.error('Error al enviar:', error);
           alert('Hubo un error. Por favor intenta de nuevo.');
@@ -239,48 +237,6 @@ Nueva solicitud de Conversaciones con Sentido:
       const createElement = (tag, props, children) => {
         return React.createElement(tag, props, children);
       };
-
-      if (submitted) {
-        return createElement('div', {
-          className: "min-h-screen flex items-center justify-center p-4 fade-in"
-        }, createElement('div', {
-          className: "max-w-2xl w-full bg-white rounded-xl shadow-lg p-8 md:p-12 text-center border border-gray-200 bg-overlay"
-        }, [
-          createElement('div', {
-            key: 'icon',
-            className: "w-24 h-24 bg-gradient-to-br from-green-500 to-green-600 rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg"
-          }, createElement(Heart, { className: "w-12 h-12 text-white" })),
-          createElement('h2', {
-            key: 'title',
-            className: "text-3xl md:text-4xl font-light text-gray-800 mb-4"
-          }, 'Tu solicitud ha sido recibida'),
-          createElement('p', {
-            key: 'message',
-            className: "text-lg text-gray-600 mb-6 leading-relaxed"
-          }, 'Se ha abierto WhatsApp para que puedas enviarnos tu información directamente. Si no se abrió automáticamente, por favor envíanos un mensaje manualmente.'),
-          createElement('div', {
-            key: 'divider',
-            className: "w-16 h-1 bg-gradient-to-r from-green-500 to-green-600 mx-auto mb-6 rounded-full"
-          }),
-          createElement('p', {
-            key: 'thanks',
-            className: "text-gray-500 italic"
-          }, 'Gracias por confiar en nosotros para tu proceso'),
-          createElement('div', {
-            key: 'service',
-            className: "mt-8 p-4 bg-green-50 rounded-lg"
-          }, createElement('p', {
-            className: "text-sm text-green-700"
-          }, createElement('strong', null, 'Servicio seleccionado:'), ' ', getServiceName(selectedService))),
-          createElement('div', {
-            key: 'button',
-            className: "mt-6"
-          }, createElement('button', {
-            onClick: () => window.location.reload(),
-            className: "px-6 py-3 bg-green-500 text-white rounded-lg hover:bg-green-600 transition"
-          }, 'Volver al inicio'))
-        ]));
-      }
 
       const steps = [
         {

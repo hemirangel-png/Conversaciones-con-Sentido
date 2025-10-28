@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Conversaciones con Sentido - Acompañamiento Terapéutico</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body {
+      background-image: url('https://images.unsplash.com/photo-1506905925346-21bda4d32df4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80');
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+      font-family: 'Inter', sans-serif;
+    }
+    
+    .bg-overlay {
+      background: rgba(255, 255, 255, 0.92);
+      backdrop-filter: blur(5px);
+    }
+    
+    .hero-gradient {
+      background: linear-gradient(135deg, rgba(16, 185, 129, 0.1) 0%, rgba(34, 197, 94, 0.05) 100%);
+    }
+    
+    .fade-in {
+      animation: fadeIn 1s ease-in-out;
+    }
+    
+    /* Nuevos estilos para los recuadros de servicios */
+    .service-card {
+      background: rgba(255, 255, 255, 0.7);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      transition: all 0.3s ease;
+    }
+    
+    .service-card:hover {
+      background: rgba(255, 255, 255, 0.9);
+      transform: translateY(-5px);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+    }
+    
+    .feature-card {
+      background: rgba(255, 255, 255, 0.8);
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    .price-tag {
+      background: linear-gradient(135deg, #10b981, #34d399);
+      color: white;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 0.875rem;
+      font-weight: 600;
+      display: inline-block;
+      margin-top: 8px;
+    }
+    
+    .price-free {
+      background: linear-gradient(135deg, #3b82f6, #60a5fa);
+    }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body class="min-h-screen">
+  <!-- Hero Section -->
+  <div class="min-h-screen flex items-center justify-center px-4">
+    <div class="max-w-4xl mx-auto text-center fade-in">
+      <div class="bg-overlay rounded-3xl shadow-2xl p-8 md:p-12 hero-gradient border border-white border-opacity-20">
+        <!-- Logo/Title -->
+        <div class="mb-8">
+          <h1 class="text-5xl md:text-6xl font-light text-gray-800 mb-4">
+            Conversaciones con Sentido
+          </h1>
+          <p class="text-xl md:text-2xl text-gray-600 mb-2">
+            Acompañamiento terapéutico y espiritual
+          </p>
+          <div class="w-24 h-1 bg-gradient-to-r from-green-400 to-green-600 mx-auto rounded-full"></div>
+        </div>
+
+        <!-- Description -->
+        <div class="max-w-2xl mx-auto mb-8">
+          <p class="text-lg text-gray-700 leading-relaxed mb-6">
+            Un espacio seguro para explorar tus desafíos, descubrir tus fortalezas 
+            y encontrar el camino hacia una vida más plena y significativa.
+          </p>
+          <p class="text-gray-600">
+            Terapia centrada en soluciones desde un enfoque humanista y espiritual.
+          </p>
+        </div>
+
+        <!-- Services - ACTUALIZADO CON ENLACES QUE CAPTURAN EL SERVICIO -->
+        <div class="grid md:grid-cols-3 gap-6 mb-8">
+          <!-- Servicio 1 - Gratuito -->
+          <div class="service-card rounded-xl p-6 shadow-lg flex flex-col">
+            <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+              <span class="text-green-600 text-xl">7</span>
+            </div>
+            <h3 class="font-semibold text-gray-800 mb-2">7 Preguntas para Comenzar el Cambio</h3>
+            <p class="text-sm text-gray-600 mb-4">Sesión introductoria de descubrimiento</p>
+            <div class="price-tag price-free mt-auto mb-4">
+              Opción gratuita
+            </div>
+            <a href="formulario.html?servicio=7preguntas" 
+               class="w-full px-4 py-2 bg-green-500 text-white text-sm font-medium rounded-lg hover:bg-green-600 transition-all text-center">
+              Comenzar Mi Proceso
+            </a>
+          </div>
+          
+          <!-- Servicio 2 - CCS Exprés -->
+          <div class="service-card rounded-xl p-6 shadow-lg flex flex-col">
+            <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
+              <span class="text-blue-600 text-xl">⚡</span>
+            </div>
+            <h3 class="font-semibold text-gray-800 mb-2">CCS Exprés</h3>
+            <p class="text-sm text-gray-600 mb-4">Sesión focalizada en un tema específico</p>
+            <div class="price-tag mt-auto mb-4">
+              12 USD / $10.000 Chile
+            </div>
+            <a href="formulario.html?servicio=expres" 
+               class="w-full px-4 py-2 bg-green-500 text-white text-sm font-medium rounded-lg hover:bg-green-600 transition-all text-center">
+              Comenzar Mi Proceso
+            </a>
+          </div>
+          
+          <!-- Servicio 3 - CCS El Camino -->
+          <div class="service-card rounded-xl p-6 shadow-lg flex flex-col">
+            <div class="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
+              <span class="text-purple-600 text-xl">🛣️</span>
+            </div>
+            <h3 class="font-semibold text-gray-800 mb-2">CCS "El Camino"</h3>
+            <p class="text-sm text-gray-600 mb-4">Acompañamiento continuo y profundo</p>
+            <div class="price-tag mt-auto mb-4">
+              22 USD / $20.000 Chile
+            </div>
+            <a href="formulario.html?servicio=camino" 
+               class="w-full px-4 py-2 bg-green-500 text-white text-sm font-medium rounded-lg hover:bg-green-600 transition-all text-center">
+              Comenzar Mi Proceso
+            </a>
+          </div>
+        </div>
+
+        <!-- Contact Info -->
+        <div class="mt-8 pt-6 border-t border-gray-200">
+          <p class="text-gray-600 text-sm">
+            ¿Preguntas? Escríbenos directamente a WhatsApp: 
+            <a href="https://wa.me/56989051679" class="text-green-600 hover:text-green-700 font-medium">
+              +56 9 8905 1679
+            </a>
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Features Section -->
+  <div class="py-16 px-4">
+    <div class="max-w-4xl mx-auto">
+      <div class="grid md:grid-cols-2 gap-8">
+        <div class="feature-card rounded-2xl p-8 shadow-lg">
+          <h3 class="text-2xl font-light text-gray-800 mb-4">¿Cómo Trabajamos?</h3>
+          <ul class="space-y-3 text-gray-700">
+            <li class="flex items-start">
+              <span class="text-green-500 mr-3">✓</span>
+              <span>Conversaciones profundas y significativas</span>
+            </li>
+            <li class="flex items-start">
+              <span class="text-green-500 mr-3">✓</span>
+              <span>Enfoque en soluciones y recursos personales</span>
+            </li>
+            <li class="flex items-start">
+              <span class="text-green-500 mr-3">✓</span>
+              <span>Acompañamiento respetuoso y ético</span>
+            </li>
+            <li class="flex items-start">
+              <span class="text-green-500 mr-3">✓</span>
+              <span>Espacio seguro y confidencial</span>
+            </li>
+          </ul>
+        </div>
+        
+        <div class="feature-card rounded-2xl p-8 shadow-lg">
+          <h3 class="text-2xl font-light text-gray-800 mb-4">Para Quién es Este Espacio</h3>
+          <ul class="space-y-3 text-gray-700">
+            <li class="flex items-start">
+              <span class="text-green-500 mr-3">•</span>
+              <span>Personas en búsqueda de sentido y propósito</span>
+            </li>
+            <li class="flex items-start">
+              <span class="text-green-500 mr-3">•</span>
+              <span>Quienes enfrentan transiciones de vida</span>
+            </li>
+            <li class="flex items-start">
+              <span class="text-green-500 mr-3">•</span>
+              <span>Personas que desean desarrollar su inteligencia emocional</span>
+            </li>
+            <li class="flex items-start">
+              <span class="text-green-500 mr-3">•</span>
+              <span>Quienes buscan crecimiento personal y espiritual</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <div class="bg-overlay border-t border-gray-200 py-8 px-4">
+    <div class="max-w-4xl mx-auto text-center">
+      <p class="text-gray-600">
+        &copy; 2024 Conversaciones con Sentido. Todos los derechos reservados.
+      </p>
+    </div>
+  </div>
+</body>
+</html>

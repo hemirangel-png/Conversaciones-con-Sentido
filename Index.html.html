@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Conversaciones con Sentido - Acompañamiento Terapéutico</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body {
+      background-image: url('https://images.unsplash.com/photo-1506905925346-21bda4d32df4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80');
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+      font-family: 'Inter', sans-serif;
+    }
+    
+    .bg-overlay {
+      background: rgba(255, 255, 255, 0.92);
+      backdrop-filter: blur(5px);
+    }
+    
+    .hero-gradient {
+      background: linear-gradient(135deg, rgba(16, 185, 129, 0.1) 0%, rgba(34, 197, 94, 0.05) 100%);
+    }
+    
+    .fade-in {
+      animation: fadeIn 1s ease-in-out;
+    }
+    
+    .feature-card {
+      background: rgba(255, 255, 255, 0.8);
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    .btn-primary {
+      background: linear-gradient(135deg, #E63946, #D90429); /* Rojo italiano vibrante */
+      color: white;
+      padding: 12px 32px;
+      border-radius: 12px;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      display: inline-block;
+    }
+    
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(230, 57, 70, 0.4);
+      background: linear-gradient(135deg, #D90429, #C1121F);
+    }
+    
+    .btn-secondary {
+      background: transparent;
+      color: #4B5563;
+      border: 2px solid #4B5563;
+      padding: 10px 24px;
+      border-radius: 12px;
+      font-weight: 500;
+      transition: all 0.3s ease;
+      display: inline-block;
+    }
+    
+    .btn-secondary:hover {
+      background: #4B5563;
+      color: white;
+      transform: translateY(-2px);
+    }
+    
+    .highlight-box {
+      background: #d1fae5; /* Verde pastel sólido */
+      border: 1px solid #a7f3d0;
+      border-radius: 20px;
+      box-shadow: 0 10px 25px rgba(16, 185, 129, 0.1);
+    }
+    
+    .info-section {
+      scroll-margin-top: 2rem;
+    }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body class="min-h-screen">
+  <!-- Hero Section REDISEÑADA -->
+  <div class="min-h-screen flex items-center justify-center px-4">
+    <div class="max-w-4xl mx-auto text-center fade-in">
+      <div class="bg-overlay rounded-3xl shadow-2xl p-8 md:p-12 hero-gradient border border-white border-opacity-20">
+        <!-- Logo/Title con subtítulo pegado -->
+        <div class="mb-16">
+          <h1 class="text-3xl md:text-4xl font-light text-gray-800 mb-2">
+            Conversaciones con Sentido
+          </h1>
+          <p class="text-lg md:text-xl text-gray-600 mb-12">
+            Acompañamiento terapéutico y espiritual
+          </p>
+          
+          <!-- Recuadro destacado con fondo sólido pastel -->
+          <div class="highlight-box rounded-2xl p-8 md:p-12 mb-8">
+            <h2 class="text-3xl md:text-5xl font-light text-gray-800 mb-4 leading-tight">
+              Bienvenidos a las 7 preguntas
+            </h2>
+            <p class="text-xl md:text-2xl text-gray-600 mb-8">
+              que iniciarán tu proceso de cambio
+            </p>
+            
+            <!-- Botón "Quiero saber más" -->
+            <button onclick="scrollToInfo()" class="btn-secondary text-lg">
+              Quiero saber más
+            </button>
+          </div>
+          
+          <!-- Botón de llamada a la acción con rojo italiano -->
+          <div class="mb-8">
+            <a href="formulario.html?servicio=7preguntas" 
+               class="btn-primary text-lg md:text-xl px-8 py-4">
+              Iniciemos con las 7 preguntas
+            </a>
+          </div>
+        </div>
+
+        <!-- Contact Info -->
+        <div class="mt-12 pt-8 border-t border-gray-200">
+          <p class="text-gray-600 text-sm">
+            ¿Preguntas? Escríbenos directamente a WhatsApp: 
+            <a href="https://wa.me/56989051679" class="text-green-600 hover:text-green-700 font-medium">
+              +56 9 8905 1679
+            </a>
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Nueva Sección de Información -->
+  <div id="info-section" class="info-section py-16 px-4">
+    <div class="max-w-4xl mx-auto">
+      <div class="feature-card rounded-2xl p-8 md:p-12 shadow-lg">
+        <h3 class="text-3xl font-light text-gray-800 mb-8 text-center">
+          ¿En qué consisten las 7 preguntas?
+        </h3>
+        <div class="max-w-3xl mx-auto">
+          <p class="text-lg text-gray-700 leading-relaxed mb-6 text-center">
+            <strong>Conversaciones con Sentido, "Las 7 preguntas"</strong> es una sesión corta de terapia vía WhatsApp, donde luego de rellenar un pequeño formulario para tener una idea clara de lo que te pasa, conversamos vía mensajes de texto o de audios.
+          </p>
+          <p class="text-lg text-gray-700 leading-relaxed mb-6 text-center">
+            Nuestro compromiso es ayudarte a destrabar un asunto que sea urgente para ti mediante 7 preguntas radicales.
+          </p>
+          <p class="text-xl text-gray-800 font-semibold text-center mt-8">
+            Este proceso no tiene costo, solo valor.
+          </p>
+        </div>
+        
+        <!-- Botón para volver al inicio -->
+        <div class="text-center mt-8">
+          <a href="formulario.html?servicio=7preguntas" 
+             class="btn-primary text-lg px-8 py-4 inline-block">
+            Comenzar ahora con las 7 preguntas
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Features Section -->
+  <div class="py-16 px-4">
+    <div class="max-w-4xl mx-auto">
+      <div class="grid md:grid-cols-2 gap-8">
+        <div class="feature-card rounded-2xl p-8 shadow-lg">
+          <h3 class="text-2xl font-light text-gray-800 mb-4">¿Cómo Trabajamos?</h3>
+          <ul class="space-y-3 text-gray-700">
+            <li class="flex items-start">
+              <span class="text-green-500 mr-3">✓</span>
+              <span>Conversaciones profundas y significativas</span>
+            </li>
+            <li class="flex items-start">
+              <span class="text-green-500 mr-3">✓</span>
+              <span>Enfoque en soluciones y recursos personales</span>
+            </li>
+            <li class="flex items-start">
+              <span class="text-green-500 mr-3">✓</span>
+              <span>Acompañamiento respetuoso y ético</span>
+            </li>
+            <li class="flex items-start">
+              <span class="text-green-500 mr-3">✓</span>
+              <span>Espacio seguro y confidencial</span>
+            </li>
+          </ul>
+        </div>
+        
+        <div class="feature-card rounded-2xl p-8 shadow-lg">
+          <h3 class="text-2xl font-light text-gray-800 mb-4">Para Quién es Este Espacio</h3>
+          <ul class="space-y-3 text-gray-700">
+            <li class="flex items-start">
+              <span class="text-green-500 mr-3">•</span>
+              <span>Personas en búsqueda de sentido y propósito</span>
+            </li>
+            <li class="flex items-start">
+              <span class="text-green-500 mr-3">•</span>
+              <span>Quienes enfrentan transiciones de vida</span>
+            </li>
+            <li class="flex items-start">
+              <span class="text-green-500 mr-3">•</span>
+              <span>Personas que desean desarrollar su inteligencia emocional</span>
+            </li>
+            <li class="flex items-start">
+              <span class="text-green-500 mr-3">•</span>
+              <span>Quienes buscan crecimiento personal y espiritual</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <div class="bg-overlay border-t border-gray-200 py-8 px-4">
+    <div class="max-w-4xl mx-auto text-center">
+      <p class="text-gray-600">
+        &copy; 2024 Conversaciones con Sentido. Todos los derechos reservados.
+      </p>
+    </div>
+  </div>
+
+  <script>
+    function scrollToInfo() {
+      document.getElementById('info-section').scrollIntoView({
+        behavior: 'smooth'
+      });
+    }
+  </script>
+</body>
+</html>
